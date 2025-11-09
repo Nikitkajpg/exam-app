@@ -12,7 +12,16 @@ fun readExcel(filePath: String): ExcelData {
         val rowData = mutableListOf<String>()
         for (cell in row) {
             when (cell.cellType) {
-                CellType.STRING -> rowData.add(cell.stringCellValue)
+                CellType.STRING -> {
+                    if (cell.stringCellValue.lowercase().startsWith("да")) {
+                        rowData.add(cell.stringCellValue.replace("да", "Да"))
+                    } else if (cell.stringCellValue.lowercase().startsWith("нет")) {
+                        rowData.add(cell.stringCellValue.replace("нет", "Нет"))
+                    } else {
+                        rowData.add(cell.stringCellValue)
+                    }
+                }
+
                 CellType.NUMERIC -> {
                     val numericValue = cell.numericCellValue
                     if (numericValue == numericValue.toInt().toDouble()) {

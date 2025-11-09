@@ -20,14 +20,13 @@ fun App(window: java.awt.Window?) {
     var errors by remember { mutableStateOf(0) }
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var errorQuestionIndices by remember { mutableStateOf<Set<Int>>(emptySet()) }
-    var errorListStatus by remember { mutableStateOf("") }
+    val errorListStatus by remember { mutableStateOf("") }
     var loadedLastIndex by remember { mutableStateOf<Int?>(null) }
 
     val scope = rememberCoroutineScope()
 
     fun saveErrors() {
         saveErrorQuestions(errorQuestionIndices)
-        errorListStatus = "Список ошибок сохранен (${errorQuestionIndices.size} вопросов)."
     }
 
     fun saveLastIndex() {
@@ -39,11 +38,6 @@ fun App(window: java.awt.Window?) {
     LaunchedEffect(Unit) {
         val loadedIndices = loadErrorQuestions()
         errorQuestionIndices = loadedIndices
-        errorListStatus = if (loadedIndices.isNotEmpty()) {
-            "Загружено ${loadedIndices.size} вопросов с ошибками."
-        } else {
-            "Список вопросов с ошибками пуст."
-        }
 
         loadedLastIndex = loadLastQuestionIndex()
 
@@ -64,7 +58,6 @@ fun App(window: java.awt.Window?) {
                         if (index in 1 until data.size) {
                             currentQuestionIndex = index
                             currentQuiz = getQuizStateByIndex(data, index)
-                            status += "\n\nПродолжаем с вопроса №: $index"
                         }
                     }
                 } catch (e: Exception) {

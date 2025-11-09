@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.njpg"
-version = "1.1.0"
+version = "1.1.1"
 
 repositories {
     mavenCentral()
@@ -31,7 +31,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Exam"
-            packageVersion = "1.1.0"
+            packageVersion = "1.1.1"
         }
     }
 }
