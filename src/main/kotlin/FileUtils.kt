@@ -2,6 +2,7 @@ import java.io.File
 
 const val ERROR_LIST_FILENAME = "error_questions.txt"
 const val FILE_PATH_FILENAME = "last_file_path.txt"
+const val LAST_INDEX_FILENAME = "last_question_index.txt"
 
 fun saveErrorQuestions(indices: Set<Int>) {
     try {
@@ -41,6 +42,26 @@ fun loadFilePath(): String? {
             null
         }
     } else {
+        null
+    }
+}
+
+fun saveLastQuestionIndex(index: Int) {
+    try {
+        File(LAST_INDEX_FILENAME).writeText(index.toString())
+    } catch (e: Exception) {
+        println("Ошибка при сохранении последнего индекса: ${e.message}")
+    }
+}
+
+fun loadLastQuestionIndex(): Int? {
+    val file = File(LAST_INDEX_FILENAME)
+    if (!file.exists()) return null
+
+    return try {
+        file.readText().trim().toIntOrNull()
+    } catch (e: Exception) {
+        println("Ошибка при загрузке последнего индекса: ${e.message}")
         null
     }
 }

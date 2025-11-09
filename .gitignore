@@ -45,3 +45,5 @@ bin/
 .DS_Store
 /last_file_path.txt
 /error_questions.txt
+/build/
+/build/compose/binaries/main/msi/

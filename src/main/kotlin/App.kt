@@ -21,12 +21,19 @@ fun App(window: java.awt.Window?) {
     var currentQuestionIndex by remember { mutableStateOf(0) }
     var errorQuestionIndices by remember { mutableStateOf<Set<Int>>(emptySet()) }
     var errorListStatus by remember { mutableStateOf("") }
+    var loadedLastIndex by remember { mutableStateOf<Int?>(null) }
 
     val scope = rememberCoroutineScope()
 
     fun saveErrors() {
         saveErrorQuestions(errorQuestionIndices)
         errorListStatus = "Список ошибок сохранен (${errorQuestionIndices.size} вопросов)."
+    }
+
+    fun saveLastIndex() {
+        if (excelData.isNotEmpty() && currentQuestionIndex > 0) {
+            saveLastQuestionIndex(currentQuestionIndex)
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -37,6 +44,8 @@ fun App(window: java.awt.Window?) {
         } else {
             "Список вопросов с ошибками пуст."
         }
+
+        loadedLastIndex = loadLastQuestionIndex()
 
         val savedPath = loadFilePath()
         if (savedPath != null) {
@@ -50,6 +59,14 @@ fun App(window: java.awt.Window?) {
 
                     status = "Файл: ${file.name}\nЗагружено строк: ${data.size} (Автозагрузка)"
                     excelData = data
+
+                    loadedLastIndex?.let { index ->
+                        if (index in 1 until data.size) {
+                            currentQuestionIndex = index
+                            currentQuiz = getQuizStateByIndex(data, index)
+                            status += "\n\nПродолжаем с вопроса №: $index"
+                        }
+                    }
                 } catch (e: Exception) {
                     status = "Ошибка автозагрузки файла '${file.name}': ${e.message}"
                 }
@@ -150,6 +167,8 @@ fun App(window: java.awt.Window?) {
                                     saveErrors()
                                 }
                             }
+
+                            saveLastIndex()
                         }
                     })
             }
