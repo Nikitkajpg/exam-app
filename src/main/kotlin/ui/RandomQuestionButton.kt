@@ -7,7 +7,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import java.util.*
-import kotlin.math.abs
 import kotlin.math.roundToInt
 
 @Composable
@@ -71,6 +70,29 @@ fun generateQuizOptions(correctAnswer: String, allAnswers: Set<String>): List<St
 }
 
 private fun generateOneIncorrectNumericAnswer(correctAnswer: String): String {
+    val fractionRegex = Regex("(\\d+)(\\s*/\\s*)(\\d+)")
+
+    if (fractionRegex.containsMatchIn(correctAnswer)) {
+        return fractionRegex.replace(correctAnswer) { matchResult ->
+            val numerator = matchResult.groupValues[1]
+            val separator = matchResult.groupValues[2]
+            val oldDenominatorStr = matchResult.groupValues[3]
+
+            val denominator = oldDenominatorStr.toDoubleOrNull() ?: return@replace matchResult.value
+
+            val delta = getRandomDelta()
+            var newDenominator = if (Math.random() > 0.5) denominator + delta else denominator - delta
+
+            if (denominator > 0 && newDenominator <= 0.0) {
+                newDenominator = denominator + delta
+            }
+
+            val newDenominatorStr = formatNewNumber(oldDenominatorStr, newDenominator)
+
+            "$numerator$separator$newDenominatorStr"
+        }
+    }
+
     val regex = Regex("(\\d+([.,]\\d+)?)")
 
     return regex.replace(correctAnswer) { matchResult ->
@@ -78,7 +100,7 @@ private fun generateOneIncorrectNumericAnswer(correctAnswer: String): String {
         val number =
             oldString.replace(',', '.').toDoubleOrNull() ?: return@replace oldString // Ошибка -> вернуть как было
 
-        val delta = getRandomDelta(number)
+        val delta = getRandomDelta()
 
         var newNumber = if (Math.random() > 0.5) number + delta else number - delta
 
@@ -90,7 +112,10 @@ private fun generateOneIncorrectNumericAnswer(correctAnswer: String): String {
     }
 }
 
-private fun getRandomDelta(number: Double): Double {
+private fun getRandomDelta(): Double {
+    val deltas = listOf(0.5, 1, 2, 5, 10, 15, 20, 25, 50, 75, 100, 150, 200)
+    return deltas.random().toDouble()
+}/*private fun getRandomDelta(number: Double): Double {
     val num = abs(number)
     val range = when {
         num == 0.0 -> (1..5)
@@ -100,7 +125,7 @@ private fun getRandomDelta(number: Double): Double {
         else -> (500..1000)
     }
     return range.random().toDouble()
-}
+}*/
 
 private fun formatNewNumber(oldString: String, newNumber: Double): String {
     if (!oldString.contains('.') && !oldString.contains(',')) {

@@ -1,6 +1,7 @@
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -8,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ui.*
+import java.awt.Desktop
 import java.io.File
 
 @Composable
@@ -22,6 +24,10 @@ fun App(window: java.awt.Window?) {
     var errorQuestionIndices by remember { mutableStateOf<Set<Int>>(emptySet()) }
     val errorListStatus by remember { mutableStateOf("") }
     var loadedLastIndex by remember { mutableStateOf<Int?>(null) }
+
+    var autoLoadedFile by remember { mutableStateOf<File?>(null) }
+    var autoLoadedDataSize by remember { mutableStateOf<Int?>(null) }
+
 
     val scope = rememberCoroutineScope()
 
@@ -51,7 +57,9 @@ fun App(window: java.awt.Window?) {
                         readExcel(savedPath)
                     }
 
-                    status = "Файл: ${file.name}\nЗагружено строк: ${data.size} (Автозагрузка)"
+                    status = ""
+                    autoLoadedFile = file
+                    autoLoadedDataSize = data.size
                     excelData = data
 
                     loadedLastIndex?.let { index ->
@@ -62,9 +70,11 @@ fun App(window: java.awt.Window?) {
                     }
                 } catch (e: Exception) {
                     status = "Ошибка автозагрузки файла '${file.name}': ${e.message}"
+                    autoLoadedFile = null
+                    autoLoadedDataSize = null
                 }
             } else {
-                status = "Последний файл не найден по пути: ${savedPath}"
+                status = "Последний файл не найден по пути: $savedPath"
             }
         }
     }
@@ -86,10 +96,45 @@ fun App(window: java.awt.Window?) {
                 currentQuiz = null
                 selectedOption = null
                 currentQuestionIndex = 0
+                autoLoadedFile = null
+                autoLoadedDataSize = null
             }
 
             Spacer(Modifier.height(16.dp))
-            Text(status)
+
+            if (autoLoadedFile != null && autoLoadedDataSize != null) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text("Файл: ")
+                        TextButton(
+                            onClick = {
+                                try {
+                                    if (Desktop.isDesktopSupported()) {
+                                        Desktop.getDesktop().open(autoLoadedFile)
+                                    } else {
+                                        status = "Не удается открыть файл: 'Desktop' не поддерживается."
+                                        autoLoadedFile = null
+                                    }
+                                } catch (e: Exception) {
+                                    status = "Ошибка при открытии файла: ${e.message}"
+                                    autoLoadedFile = null
+                                }
+                            },
+                            contentPadding = PaddingValues(0.dp),
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        ) {
+                            Text(autoLoadedFile!!.name)
+                        }
+                    }
+                    Text("Загружено строк: $autoLoadedDataSize (Автозагрузка)")
+                }
+            }
+
+            if (status.isNotEmpty()) {
+                Text(status)
+            }
 
             if (excelData.isNotEmpty()) {
                 Spacer(Modifier.height(32.dp))
