@@ -41,6 +41,20 @@ fun App(window: java.awt.Window?) {
         }
     }
 
+    fun skipQuestion() {
+        if (excelData.isNotEmpty() && currentQuestionIndex > 0) {
+            if (!errorQuestionIndices.contains(currentQuestionIndex)) {
+                errorQuestionIndices = errorQuestionIndices + currentQuestionIndex
+                saveErrors()
+            }
+            val nextIndex = (currentQuestionIndex % excelData.size) + 1
+            currentQuiz = getQuizStateByIndex(excelData, nextIndex)
+            selectedOption = null
+            currentQuestionIndex = nextIndex
+            saveLastIndex()
+        }
+    }
+
     LaunchedEffect(Unit) {
         val loadedIndices = loadErrorQuestions()
         errorQuestionIndices = loadedIndices
@@ -154,6 +168,10 @@ fun App(window: java.awt.Window?) {
                         selectedOption = null
                         currentQuestionIndex = newIndex
                     }
+
+                    Spacer(Modifier.width(16.dp))
+
+                    SkipQuestionButton(onClick = ::skipQuestion)
                 }
 
                 Spacer(Modifier.height(16.dp))
