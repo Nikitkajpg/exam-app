@@ -25,11 +25,12 @@ fun InstructionsAndStats(totalQuestions: Int, errors: Int) {
         Spacer(Modifier.height(12.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Всего вопросов: $totalQuestions", style = MaterialTheme.typography.body1
+                text = "Вопросов пройдено: $totalQuestions", style = MaterialTheme.typography.body1
             )
+            Spacer(Modifier.width(20.dp))
             Text(
                 text = "Ошибки: $errors",
                 color = if (errors > 0) MaterialTheme.colors.error else LocalContentColor.current,

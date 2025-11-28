@@ -1,12 +1,11 @@
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ui.*
 import java.awt.Desktop
@@ -38,20 +37,6 @@ fun App(window: java.awt.Window?) {
     fun saveLastIndex() {
         if (excelData.isNotEmpty() && currentQuestionIndex > 0) {
             saveLastQuestionIndex(currentQuestionIndex)
-        }
-    }
-
-    fun skipQuestion() {
-        if (excelData.isNotEmpty() && currentQuestionIndex > 0) {
-            if (!errorQuestionIndices.contains(currentQuestionIndex)) {
-                errorQuestionIndices = errorQuestionIndices + currentQuestionIndex
-                saveErrors()
-            }
-            val nextIndex = (currentQuestionIndex % excelData.size) + 1
-            currentQuiz = getQuizStateByIndex(excelData, nextIndex)
-            selectedOption = null
-            currentQuestionIndex = nextIndex
-            saveLastIndex()
         }
     }
 
@@ -170,8 +155,6 @@ fun App(window: java.awt.Window?) {
                     }
 
                     Spacer(Modifier.width(16.dp))
-
-                    SkipQuestionButton(onClick = ::skipQuestion)
                 }
 
                 Spacer(Modifier.height(16.dp))
