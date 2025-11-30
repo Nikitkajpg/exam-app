@@ -1,18 +1,18 @@
 package ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun InstructionsAndStats(totalQuestions: Int, errors: Int) {
-    Column(horizontalAlignment = Alignment.Start, modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier.padding(8.dp)
+    ) {
         Text(
             text = "Таблица Excel должна быть в формате:", style = MaterialTheme.typography.subtitle1
         )
@@ -24,9 +24,7 @@ fun InstructionsAndStats(totalQuestions: Int, errors: Int) {
 
         Spacer(Modifier.height(12.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        Row {
             Text(
                 text = "Вопросов пройдено: $totalQuestions", style = MaterialTheme.typography.body1
             )
@@ -38,5 +36,4 @@ fun InstructionsAndStats(totalQuestions: Int, errors: Int) {
             )
         }
     }
-    Divider(Modifier.padding(top = 8.dp))
 }

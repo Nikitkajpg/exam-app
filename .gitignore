@@ -47,3 +47,4 @@ bin/
 /error_questions.txt
 /build/
 /build/compose/binaries/main/msi/
+/last_question_index.txt

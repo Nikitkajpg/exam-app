@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.njpg"
-version = "1.3.1"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -21,6 +21,7 @@ dependencies {
     // (in a separate module for demo project and in testMain).
     // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.0")
     implementation("org.apache.poi:poi-ooxml:5.2.5")
 }
 
@@ -31,7 +32,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Exam"
-            packageVersion = "1.3.1"
+            packageVersion = "2.0.0"
         }
     }
 }

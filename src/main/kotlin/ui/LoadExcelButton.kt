@@ -1,44 +1,31 @@
 package ui
 
-import ExcelData
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import openFileDialog
-import readExcel
-import saveFilePath
+import java.awt.FileDialog
 import java.awt.Window
-import java.io.File
 
 @Composable
 fun LoadExcelButton(
-    window: Window?, scope: CoroutineScope, onDataLoaded: (String, ExcelData) -> Unit
+    window: Window?, onPathSelected: (String) -> Unit
 ) {
     Button(onClick = {
         val filePath = openFileDialog(window, "Открыть .xlsx файл", ".xlsx")
         if (filePath != null) {
-            saveFilePath(filePath)
-            onDataLoaded("Загрузка...", emptyList())
-            scope.launch {
-                try {
-                    val data = withContext(Dispatchers.IO) {
-                        readExcel(filePath)
-                    }
-
-                    onDataLoaded(
-                        "Файл: ${File(filePath).name}\nЗагружено строк: ${data.size}", data
-                    )
-
-                } catch (e: Exception) {
-                    onDataLoaded("Ошибка чтения: ${e.message}", emptyList())
-                }
-            }
+            onPathSelected(filePath)
         }
     }) {
         Text("Загрузить Excel")
     }
+}
+
+fun openFileDialog(window: Window?, title: String, allowedExtension: String): String? {
+    val dialog = FileDialog(
+        window as? java.awt.Frame, title, FileDialog.LOAD
+    ).apply {
+        setFilenameFilter { _, name -> name.endsWith(allowedExtension) }
+        isVisible = true
+    }
+    return if (dialog.file != null) dialog.directory + dialog.file else null
 }

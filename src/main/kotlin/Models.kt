@@ -1,1 +1,0 @@
-typealias ExcelData = List<List<String>>
