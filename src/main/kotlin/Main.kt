@@ -4,11 +4,11 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 
 fun main() = application {
+    val onExit = ::exitApplication
+
     Window(
-        onCloseRequest = ::exitApplication,
-        state = rememberWindowState(placement = WindowPlacement.Maximized),
-        title = "Exam"
+        onCloseRequest = onExit, state = rememberWindowState(placement = WindowPlacement.Maximized), title = "Exam"
     ) {
-        App(this.window)
+        App(this.window, onExit)
     }
 }

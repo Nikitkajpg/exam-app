@@ -13,8 +13,8 @@ import models.SettingsRepository
 
 class ViewModel(
     private val scope: CoroutineScope,
-    private val excelRepo: ExcelRepository = ExcelRepository(),
-    private val settingsRepo: SettingsRepository = SettingsRepository(),
+    private val excelRepository: ExcelRepository = ExcelRepository(),
+    private val settingsRepository: SettingsRepository = SettingsRepository(),
     private val quizEngine: QuizEngine = QuizEngine()
 ) {
     var uiState by mutableStateOf(UiState())
@@ -27,42 +27,36 @@ class ViewModel(
     }
 
     private fun loadInitialData() {
-        val lastPath = settingsRepo.loadFilePath()
-        val lastIndex = settingsRepo.loadLastQuestionIndex()
-        val errorIndices = settingsRepo.loadErrorQuestions()
+        val lastPath = settingsRepository.loadFilePath()
+        val lastIndex = settingsRepository.loadLastQuestionIndex()
+        val errorIndices = settingsRepository.loadErrorQuestions()
 
         uiState = uiState.copy(
             currentQuestionIndex = lastIndex ?: 0,
             errorQuestionIndices = errorIndices,
             errorsCount = errorIndices.size,
-            status = if (lastPath != null) "Последний файл: $lastPath." else "Выберите Excel-файл."
+            filePath = lastPath
         )
 
         if (lastPath != null) loadFile(lastPath)
     }
 
     fun loadFile(path: String) {
-        uiState = uiState.copy(status = "Загрузка")
         scope.launch(Dispatchers.IO) {
             try {
-                val questions = excelRepo.readExcel(path)
+                val questions = excelRepository.readExcel(path)
                 allAnswersPool = questions.map { it.answer }
 
-                settingsRepo.saveFilePath(path)
+                settingsRepository.saveFilePath(path)
 
                 withContext(Dispatchers.Main) {
                     uiState = uiState.copy(
-                        questions = questions,
-                        currentQuestionIndex = 0,
-                        status = "Загружено строк: ${questions.size}.",
-                        isDataLoaded = true
+                        questions = questions, currentQuestionIndex = 0, isDataLoaded = true
                     )
                     generateQuestion(uiState.currentQuestionIndex)
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    uiState = uiState.copy(status = "Ошибка: ${e.localizedMessage}")
-                }
+                e.printStackTrace()
             }
         }
     }
@@ -70,7 +64,6 @@ class ViewModel(
     private fun generateQuestion(index: Int) {
         val questions = uiState.questions
         if (index !in questions.indices) {
-            uiState = uiState.copy(status = "Вопросы закончились или индекс неверен")
             return
         }
 
@@ -85,7 +78,7 @@ class ViewModel(
     fun nextQuestion() {
         val nextIndex = uiState.currentQuestionIndex + 1
         generateQuestion(nextIndex)
-        scope.launch(Dispatchers.IO) { settingsRepo.saveLastQuestionIndex(nextIndex) }
+        scope.launch(Dispatchers.IO) { settingsRepository.saveLastQuestionIndex(nextIndex) }
     }
 
     fun submitAnswer(answer: String) {
@@ -109,11 +102,10 @@ class ViewModel(
 
     private fun updateErrors(newErrors: Set<Int>) {
         uiState = uiState.copy(
-            errorQuestionIndices = newErrors,
-            errorsCount = newErrors.size
+            errorQuestionIndices = newErrors, errorsCount = newErrors.size
         )
         scope.launch(Dispatchers.IO) {
-            settingsRepo.saveErrorQuestions(newErrors)
+            settingsRepository.saveErrorQuestions(newErrors)
         }
     }
 
@@ -122,17 +114,10 @@ class ViewModel(
         if (indices.isEmpty()) return
 
         val mistakeIndex = indices.first()
-//        val newIndices = indices - mistakeIndex
 
         uiState = uiState.copy(
-//            errorQuestionIndices = newIndices,
-//            errorsCount = newIndices.size,
             selectedOption = null
         )
-
-//        scope.launch(Dispatchers.IO) {
-//            settingsRepo.saveErrorQuestions(newIndices)
-//        }
 
         generateQuestion(mistakeIndex)
     }

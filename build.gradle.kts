@@ -6,8 +6,10 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+val appVersion = "2.1.0"
+
 group = "com.njpg"
-version = "2.0.0"
+version = appVersion
 
 repositories {
     mavenCentral()
@@ -32,7 +34,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Exam"
-            packageVersion = "2.0.0"
+            packageVersion = appVersion
         }
     }
 }

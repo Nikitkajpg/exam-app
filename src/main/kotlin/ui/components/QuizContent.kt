@@ -1,4 +1,4 @@
-package ui
+package ui.components
 
 import QuizState
 import androidx.compose.foundation.layout.Column
