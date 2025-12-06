@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 
@@ -27,7 +28,7 @@ fun AnswerOptionsGroup(
 
             val backgroundColor = if (answerGiven) {
                 when (text) {
-                    quiz.correctAnswer -> MaterialTheme.colorScheme.secondary
+                    quiz.correctAnswer -> Color(36, 144, 30)
                     selected -> MaterialTheme.colorScheme.error
                     else -> MaterialTheme.colorScheme.surface
                 }

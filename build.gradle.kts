@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-val appVersion = "2.2.0"
+val appVersion = "2.2.1"
 
 group = "com.njpg"
 version = appVersion
@@ -33,7 +33,8 @@ compose.desktop {
         mainClass = "MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            modules("java.base", "java.desktop", "jdk.unsupported")
+            targetFormats(TargetFormat.Msi, TargetFormat.Exe)
             packageName = "Exam"
             packageVersion = appVersion
         }

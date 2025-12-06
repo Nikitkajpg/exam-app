@@ -51,7 +51,7 @@ class ViewModel(
 
                 withContext(Dispatchers.Main) {
                     uiState = uiState.copy(
-                        questions = questions, currentQuestionIndex = 0, isDataLoaded = true
+                        questions = questions, isDataLoaded = true
                     )
                     generateQuestion(uiState.currentQuestionIndex)
                 }
