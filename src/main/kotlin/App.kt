@@ -1,11 +1,8 @@
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import ui.screen.MenuScreen
-import ui.screen.Navigator
-import ui.screen.QuizScreen
-import ui.screen.Screen
+import ui.screen.*
 import viewmodel.NavigatorVM
 import viewmodel.ViewModel
 import java.awt.Window
@@ -22,7 +19,8 @@ fun App(window: Window?, onExit: () -> Unit) {
     MaterialTheme {
         when (navigator.currentScreen) {
             Screen.Menu -> MenuScreen(window, viewModel, navigatorVM, onExit, state)
-            Screen.Quiz -> QuizScreen(window, state, viewModel, navigatorVM)
+            Screen.Quiz -> QuizScreen(state, viewModel, navigatorVM)
+            Screen.About -> AboutScreen(navigatorVM)
         }
     }
 }

@@ -1,7 +1,7 @@
 package ui.components
 
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import java.awt.FileDialog
 import java.awt.Window

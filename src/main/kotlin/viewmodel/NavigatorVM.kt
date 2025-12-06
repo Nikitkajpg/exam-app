@@ -8,4 +8,5 @@ class NavigatorVM(
 ) {
     fun goToMenu() = navigator.navigateTo(Screen.Menu)
     fun goToQuiz() = navigator.navigateTo(Screen.Quiz)
+    fun goToAbout() = navigator.navigateTo(Screen.About)
 }

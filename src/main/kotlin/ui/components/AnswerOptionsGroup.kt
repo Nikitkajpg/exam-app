@@ -6,7 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,18 +27,18 @@ fun AnswerOptionsGroup(
 
             val backgroundColor = if (answerGiven) {
                 when (text) {
-                    quiz.correctAnswer -> MaterialTheme.colors.secondary
-                    selected -> MaterialTheme.colors.error
-                    else -> MaterialTheme.colors.surface
+                    quiz.correctAnswer -> MaterialTheme.colorScheme.secondary
+                    selected -> MaterialTheme.colorScheme.error
+                    else -> MaterialTheme.colorScheme.surface
                 }
             } else {
-                MaterialTheme.colors.surface
+                MaterialTheme.colorScheme.surface
             }
 
-            val contentColor = if (backgroundColor == MaterialTheme.colors.surface) {
+            val contentColor = if (backgroundColor == MaterialTheme.colorScheme.surface) {
                 LocalContentColor.current
             } else {
-                MaterialTheme.colors.onPrimary
+                MaterialTheme.colorScheme.onPrimary
             }
 
             Surface(
@@ -48,11 +48,7 @@ fun AnswerOptionsGroup(
                         enabled = !answerGiven,
                         onClick = { onOptionSelected(text) },
                         role = Role.RadioButton
-                    ),
-                color = backgroundColor,
-                contentColor = contentColor,
-                elevation = 2.dp,
-                shape = MaterialTheme.shapes.medium
+                    ), color = backgroundColor, contentColor = contentColor, shape = MaterialTheme.shapes.medium
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -63,12 +59,12 @@ fun AnswerOptionsGroup(
                         onClick = null,
                         enabled = !answerGiven,
                         colors = RadioButtonDefaults.colors(
-                            selectedColor = if (answerGiven) contentColor else MaterialTheme.colors.primary,
+                            selectedColor = if (answerGiven) contentColor else MaterialTheme.colorScheme.primary,
                             unselectedColor = contentColor
                         )
                     )
                     Spacer(Modifier.width(16.dp))
-                    Text(text = text, style = MaterialTheme.typography.subtitle1)
+                    Text(text = text, style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }

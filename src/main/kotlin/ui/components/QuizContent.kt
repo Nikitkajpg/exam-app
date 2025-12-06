@@ -4,8 +4,8 @@ import QuizState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -15,7 +15,8 @@ import viewmodel.ViewModel
 fun QuizContent(quizState: QuizState, selectedOption: String?, viewModel: ViewModel) {
     Column {
         Text(
-            text = "Вопрос ${quizState.questionNumber}: ${quizState.question}", style = MaterialTheme.typography.h6
+            text = "Вопрос ${quizState.questionNumber}: ${quizState.question}",
+            style = MaterialTheme.typography.labelLarge
         )
         Spacer(Modifier.height(16.dp))
         AnswerOptionsGroup(

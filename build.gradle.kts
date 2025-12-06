@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-val appVersion = "2.1.0"
+val appVersion = "2.2.0"
 
 group = "com.njpg"
 version = appVersion
@@ -25,6 +25,7 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.0")
     implementation("org.apache.poi:poi-ooxml:5.2.5")
+    implementation(compose.material3)
 }
 
 compose.desktop {
