@@ -121,4 +121,11 @@ class ViewModel(
 
         generateQuestion(mistakeIndex)
     }
+
+    fun changeCurrentQuestionIndex(currentQuestionIndex: Int) {
+        generateQuestion(currentQuestionIndex)
+        scope.launch(Dispatchers.IO) {
+            settingsRepository.saveLastQuestionIndex(currentQuestionIndex)
+        }
+    }
 }
