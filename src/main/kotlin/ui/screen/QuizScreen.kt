@@ -1,9 +1,7 @@
 package ui.screen
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +16,7 @@ import viewmodel.ViewModel
 @Composable
 fun QuizScreen(state: UiState, viewModel: ViewModel, navigatorVM: NavigatorVM) {
     Column(modifier = Modifier.padding(16.dp)) {
-        ControlPanel(state, viewModel, navigatorVM)
+        ControlPanel(state, viewModel)
 
         if (state.isDataLoaded && state.currentQuiz != null) {
             QuizContent(state.currentQuiz, state.selectedOption, viewModel)
@@ -26,6 +24,14 @@ fun QuizScreen(state: UiState, viewModel: ViewModel, navigatorVM: NavigatorVM) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text("Загрузите файл для начала")
             }
+        }
+
+        Spacer(Modifier.height(100.dp))
+        Button(
+            onClick = { navigatorVM.goToMenu() },
+            modifier = Modifier.fillMaxWidth(0.6f).align(Alignment.CenterHorizontally)
+        ) {
+            Text("Меню")
         }
     }
 }

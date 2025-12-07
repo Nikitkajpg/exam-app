@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-val appVersion = "2.3.0"
+val appVersion = "2.3.1"
 
 group = "com.njpg"
 version = appVersion
