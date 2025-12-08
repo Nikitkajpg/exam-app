@@ -51,7 +51,8 @@ class ViewModel(
 
                 withContext(Dispatchers.Main) {
                     uiState = uiState.copy(
-                        questions = questions, isDataLoaded = true
+                        questions = questions, isDataLoaded = true,
+                        filePath = path
                     )
                     generateQuestion(uiState.currentQuestionIndex)
                 }
