@@ -22,7 +22,8 @@ fun MenuScreen(window: Window?, viewModel: ViewModel, navigatorVM: NavigatorVM, 
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (state.isDataLoaded) {
-            Text("Загружен файл: ${File(state.filePath!!).name}")
+            val fileName = state.filePath?.let { File(it).name } ?: "Неизвестный файл"
+            Text("Загружен файл: $fileName")
             Row {
                 if (state.currentQuestionIndex != 0) {
                     Button(onClick = {
