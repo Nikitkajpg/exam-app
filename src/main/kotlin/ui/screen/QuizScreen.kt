@@ -15,18 +15,20 @@ import viewmodel.ViewModel
 
 @Composable
 fun QuizScreen(state: UiState, viewModel: ViewModel, navigatorVM: NavigatorVM) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        ControlPanel(state, viewModel)
+    Column(modifier = Modifier.padding(16.dp).fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween) {
+        Column {
+            ControlPanel(state, viewModel)
 
-        if (state.isDataLoaded && state.currentQuiz != null) {
-            QuizContent(state.currentQuiz, state.selectedOption, viewModel)
-        } else {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Загрузите файл для начала")
+            if (state.isDataLoaded && state.currentQuiz != null) {
+                QuizContent(state.currentQuiz, state.selectedOption, viewModel)
+            } else {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Загрузите файл для начала")
+                }
             }
         }
 
-        Spacer(Modifier.height(100.dp))
         Button(
             onClick = { navigatorVM.goToMenu() },
             modifier = Modifier.fillMaxWidth(0.6f).align(Alignment.CenterHorizontally)

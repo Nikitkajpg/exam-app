@@ -46,9 +46,15 @@ class QuizEngine {
     private fun generateTextOptions(
         correctAnswer: String, lowerCorrect: String, allAnswers: List<String>
     ): List<String> {
-        val incorrectOptions =
-            allAnswers.asSequence().filter { it.lowercase() != lowerCorrect }.filter { !isYesNoAnswer(it.lowercase()) }
-                .filter { !it.any(Char::isDigit) }.take(3).toList()
+        val incorrectOptions = allAnswers
+            .filter { candidate ->
+                val lowerCandidate = candidate.lowercase()
+                lowerCandidate != lowerCorrect &&
+                        !isYesNoAnswer(lowerCandidate) &&
+                        !candidate.any(Char::isDigit)
+            }
+            .shuffled()
+            .take(3)
 
         return (incorrectOptions + correctAnswer).shuffled()
     }

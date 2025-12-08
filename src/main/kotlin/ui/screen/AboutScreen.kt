@@ -17,7 +17,7 @@ import viewmodel.NavigatorVM
 fun AboutScreen(navigatorVM: NavigatorVM) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(
